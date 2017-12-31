@@ -29,11 +29,11 @@
                   <ul>
                       <li v-for="item in goodsList">
                           <div class="pic">
-                              <a href="#"><img v-lazy="item.src" alt=""></a>
+                              <a href="#"><img v-lazy="item.productUrl" alt=""></a>
                           </div>
                           <div class="main">
-                              <div class="name">{{item.name}}</div>
-                              <div class="price">{{item.price}}</div>
+                              <div class="name">{{item.productName}}</div>
+                              <div class="price">{{item.salePrice}}</div>
                               <div class="btn-area">
                                   <a href="javascript:;" class="btn btn--m">加入购物车</a>
                               </div>
