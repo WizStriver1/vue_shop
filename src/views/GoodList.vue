@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     getGoodsList: function() {
-      axios.get("/goods").then((result) => {
+      axios.get("http://localhost:3000/goods").then((result) => {
         var res = result.data.result;
         this.goodsList = res.list;
       });

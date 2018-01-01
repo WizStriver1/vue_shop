@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 var ejs = require('ejs');
 
 var index = require('./routes/index');
@@ -25,9 +26,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var corsOptions = {
+  origin: 'http://localhost:8081',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
+}
+
 app.use('/', index);
 app.use('/users', users);
-app.use('/goods', goods);
+app.use('/goods', cors(corsOptions), goods);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
