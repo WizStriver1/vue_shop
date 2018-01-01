@@ -41,6 +41,12 @@
                       </li>
                   </ul>
               </div>
+              <div class="view-more-normal"
+                  v-infinite-scroll="loadMore"
+                  infinite-scroll-disabled="busy"
+                  infinite-scroll-distance="20">
+                <img src="./../../static/loading-svg/loading-spinning-bubbles.svg" v-show="loading" alt="">
+              </div>
           </div>
       </div>
       <div class="md-overlay" v-show="filterBy" @click="closeFilterBy"></div>
@@ -80,7 +86,9 @@ export default {
       filterBy: false,
       page: "1",
       pageSize: "8",
-      descendFlag: false
+      descendFlag: false,
+      busy: true,
+      loading: false,
     }
   },
   components: {
@@ -92,17 +100,34 @@ export default {
     this.getGoodsList();
   },
   methods: {
-    getGoodsList: function() {
+    getGoodsList: function(flag) {
       var param = {
         page: this.page,
         pageSize: this.pageSize,
         sort: this.descendFlag ? -1 : 1
       }
+      this.loading = true;
       axios.get("http://localhost:3000/goods", {
         params: param
       }).then((result) => {
-        var res = result.data.result;
-        this.goodsList = res.list;
+        var res = result.data;
+        this.loading = false;
+        if(res.status == "0") {
+          if(flag) {
+            this.goodsList = this.goodsList.concat(res.result.list);
+            console.log(res.result.list)
+            if(res.result.count == 0) {
+              this.busy = true;
+            } else {
+              this.busy = false;
+            }
+          } else {
+            this.goodsList = res.result.list;
+            this.busy = false;
+          }
+        } else {
+          this.goodsList = [];
+        }
       });
     },
     changeCurItem: function(item) {
@@ -122,6 +147,13 @@ export default {
     changeSort: function() {
       this.descendFlag = !this.descendFlag;
       this.getGoodsList();
+    },
+    loadMore: function() {
+      this.busy = true;
+      setTimeout(() => {
+        this.page++;
+        this.getGoodsList(true);
+      }, 500);
     }
   }
 }

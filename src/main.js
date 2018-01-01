@@ -4,7 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import LazyLoad from "vue-lazyload"
+import InfiniteScroll from 'vue-infinite-scroll'
 
+Vue.use(InfiniteScroll);
 Vue.use(LazyLoad, {
 	loading: "static/loading-svg/loading-bars.svg",
 	attempt: 3
