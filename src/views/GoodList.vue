@@ -76,11 +76,12 @@ export default {
       goodsList: [],
       goodsPrice: [
         {"startPrice":'0.00',"endPrice": "100.00"},
-        {"startPrice":'100.00',"endPrice": "500.00"},
+        {"startPrice":'100.00',"endPrice": "200.00"},
+        {"startPrice":'200.00',"endPrice": "500.00"},
         {"startPrice":'500.00',"endPrice": "1000.00"},
         {"startPrice":'1000.00',"endPrice": "2000.00"},
-        {"startPrice":'2000.00',"endPrice": "3000.00"},
-        {"startPrice":'3000.00',"endPrice": "6000.00"}
+        {"startPrice":'1000.00',"endPrice": "2000.00"},
+        {"startPrice":'2000.00',"endPrice": "5000.00"},
       ],
       curItem: "all",
       filterBy: false,
@@ -104,7 +105,8 @@ export default {
       var param = {
         page: this.page,
         pageSize: this.pageSize,
-        sort: this.descendFlag ? -1 : 1
+        sort: this.descendFlag ? -1 : 1,
+        priceLevel: this.curItem
       }
       this.loading = true;
       axios.get("http://localhost:3000/goods", {
@@ -132,6 +134,9 @@ export default {
     },
     changeCurItem: function(item) {
       this.curItem = item;
+      this.page = "1",
+      this.descendFlag = false;
+      this.getGoodsList();
     },
     showFilterBy: function() {
       this.filterBy = true;
@@ -145,6 +150,7 @@ export default {
       this.getGoodsList();
     },
     changeSort: function() {
+      this.page = "1";
       this.descendFlag = !this.descendFlag;
       this.getGoodsList();
     },
