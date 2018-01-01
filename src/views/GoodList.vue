@@ -29,7 +29,7 @@
                   <ul>
                       <li v-for="item in goodsList">
                           <div class="pic">
-                              <a href="#"><img v-lazy="item.productUrl" alt=""></a>
+                              <a href="#"><img v-lazy="'/static/images/' + item.productImage" alt=""></a>
                           </div>
                           <div class="main">
                               <div class="name">{{item.productName}}</div>
@@ -90,13 +90,13 @@ export default {
   },
   methods: {
     getGoodsList: function() {
-      axios.get("/hello").then((result) => {
-        this.goodsList = result.data.data;
+      axios.get("/goods").then((result) => {
+        var res = result.data.result;
+        this.goodsList = res.list;
       });
     },
     changeCurItem: function(item) {
       this.curItem = item;
-      console.log(item);
     },
     showFilterBy: function() {
       this.filterBy = true;
