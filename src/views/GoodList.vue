@@ -7,8 +7,8 @@
     <div class="container">
       <div class="filter-nav">
           <span class="sortby">排序:</span>
-          <a href="javascript:void(0)" class="default cur">默认</a>
-          <a href="javascript:void(0)" class="price">价格 <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+          <a href="javascript:void(0)" class="default cur" @click="defauleSort">默认</a>
+          <a href="javascript:void(0)" class="price" :class="{'sort-up' : descendFlag}" @click="changeSort">价格 <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
           <a href="javascript:void(0)" @click="showFilterBy" class="filterby">筛选</a>
       </div>
       <div class="accessory-result">
@@ -78,6 +78,9 @@ export default {
       ],
       curItem: "all",
       filterBy: false,
+      page: "1",
+      pageSize: "8",
+      descendFlag: false
     }
   },
   components: {
@@ -90,7 +93,14 @@ export default {
   },
   methods: {
     getGoodsList: function() {
-      axios.get("http://localhost:3000/goods").then((result) => {
+      var param = {
+        page: this.page,
+        pageSize: this.pageSize,
+        sort: this.descendFlag ? -1 : 1
+      }
+      axios.get("http://localhost:3000/goods", {
+        params: param
+      }).then((result) => {
         var res = result.data.result;
         this.goodsList = res.list;
       });
@@ -103,6 +113,15 @@ export default {
     },
     closeFilterBy: function() {
       this.filterBy = false;
+    },
+    defauleSort: function() {
+      this.page = "1";
+      this.descendFlag = false;
+      this.getGoodsList();
+    },
+    changeSort: function() {
+      this.descendFlag = !this.descendFlag;
+      this.getGoodsList();
     }
   }
 }
