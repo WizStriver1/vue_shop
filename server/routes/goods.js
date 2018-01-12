@@ -27,8 +27,7 @@ router.get("/",function(req, res, next) {
 	var priceLte = "";
 	var skip = (page-1)*pageSize;
 	var params = {};
-	console.log(priceLevel);
-	if( priceLevel != "all") {
+	if( priceLevel && priceLevel != "all") {
 		switch(priceLevel) {
 			case "0": priceGt = 0; priceLte = 100; break;
 			case "1": priceGt = 100; priceLte = 200; break;
@@ -45,24 +44,26 @@ router.get("/",function(req, res, next) {
 		}
 	}
 	var goodsModel = Goods.find(params).skip(skip).limit(pageSize);
-	goodsModel.sort({"salePrice": sort});
-	goodsModel.exec(function(err, doc) {
-		if(err) {
-			res.json({
-				status: "1",
-				msg: err.message
-			})
-		}else {
-			res.json({
-				status: "0",
-				msg: '',
-				result: {
-					count: doc.length,
-					list: doc
-				}
-			});
-		}
-	});
+	console.log(goodsModel)
+	// goodsModel.
+	// 	sort({"salePrice": sort}).
+	// 	exec(function(err, doc) {
+	// 		if(err) {
+	// 			res.json({
+	// 				status: "1",
+	// 				msg: err.message
+	// 			})
+	// 		}else {
+	// 			res.json({
+	// 				status: "0",
+	// 				msg: '',
+	// 				result: {
+	// 					count: doc.length,
+	// 					list: doc
+	// 				}
+	// 			});
+	// 		}
+	// 	});
 });
 
 module.exports = router;

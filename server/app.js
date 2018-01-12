@@ -26,8 +26,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var whitelist = ['http://localhost:8080', 'http://localhost:8081'];
+
 var corsOptions = {
-  origin: 'http://localhost:8081',
+  origin: function(origin, callback){
+    if(whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by cors"));
+    }
+  },
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
 }
 
