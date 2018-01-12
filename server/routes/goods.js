@@ -19,10 +19,10 @@ mongoose.connection.on('disconnected', function() {
 });
 
 router.get("/",function(req, res, next) {
-	var page = parseInt(req.param("page"));
-	var pageSize = parseInt(req.param("pageSize"));
-	var sort = parseInt(req.param("sort"));
-	var priceLevel = req.param("priceLevel");
+	var page = parseInt(req.param("page")) || 1;
+	var pageSize = parseInt(req.param("pageSize")) || 8;
+	var sort = parseInt(req.param("sort")) || 1;
+	var priceLevel = req.param("priceLevel") || "all";
 	var priceGt = "";
 	var priceLte = "";
 	var skip = (page-1)*pageSize;
@@ -44,26 +44,25 @@ router.get("/",function(req, res, next) {
 		}
 	}
 	var goodsModel = Goods.find(params).skip(skip).limit(pageSize);
-	console.log(goodsModel)
-	// goodsModel.
-	// 	sort({"salePrice": sort}).
-	// 	exec(function(err, doc) {
-	// 		if(err) {
-	// 			res.json({
-	// 				status: "1",
-	// 				msg: err.message
-	// 			})
-	// 		}else {
-	// 			res.json({
-	// 				status: "0",
-	// 				msg: '',
-	// 				result: {
-	// 					count: doc.length,
-	// 					list: doc
-	// 				}
-	// 			});
-	// 		}
-	// 	});
+	goodsModel.
+		sort({"salePrice": sort}).
+		exec(function(err, doc) {
+			if(err) {
+				res.json({
+					status: "1",
+					msg: err.message
+				})
+			}else {
+				res.json({
+					status: "0",
+					msg: '',
+					result: {
+						count: doc.length,
+						list: doc
+					}
+				});
+			}
+		});
 });
 
 module.exports = router;
