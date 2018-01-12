@@ -41,7 +41,7 @@ var corsOptions = {
 }
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/users', cors(corsOptions), users);
 app.use('/goods', cors(corsOptions), goods);
 
 // catch 404 and forward to error handler

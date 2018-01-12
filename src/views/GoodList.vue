@@ -117,7 +117,6 @@ export default {
         if(res.status == "0") {
           if(flag) {
             this.goodsList = this.goodsList.concat(res.result.list);
-            console.log(res.result.list)
             if(res.result.count == 0) {
               this.busy = true;
             } else {
